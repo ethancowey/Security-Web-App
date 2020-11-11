@@ -95,7 +95,7 @@
 <form action="NumberChecker" method="post">
     <input type="submit" value="Check your numbers">
 </form>
-<p><%="Below will tell you if you've won please click Check your Numbers to see if you've won" //Note 10 11 12 13 14 15 is a win%></p>
+<p><%="Below will tell you if you've won please click Check your Numbers to see if you've won"%></p>
 <p><%=session.getAttribute("winCheck")%></p>
 </br>
 

@@ -29,22 +29,25 @@ public class AddUserNumbers extends HttpServlet {
         String number6 = request.getParameter("number6");
 
         String numberCombo =number1+" "+number2+" "+number3+" "+number4+" "+number5+" "+number6;
+        //Below encrypts the data passing it to my encrypt method and then making it a string that can be writtten to a txt file
         byte[] comboEncrypted = encrypt(numberCombo, request, response);
         String comboEncryptedConversion = Base64.getEncoder().encodeToString(comboEncrypted);
+
         HttpSession session = request.getSession();
         String hash = session.getAttribute("password").toString();
         String hashReduced = hash.substring(0,20);
-        File userNumbers = new File(hashReduced+".txt");
+        File directory = new File("Draws");
+        File userNumbers = new File("Draws",hashReduced+".txt");
         System.out.println("Encrypted numbers will be written to"+userNumbers.getAbsolutePath());
         session.setAttribute("path",userNumbers.getAbsolutePath());
         if(userNumbers.exists()){
 
         }
-        else;
+        else
         {userNumbers.createNewFile();}
-        FileWriter fileWriter = new FileWriter(hashReduced+".txt", true);
+        FileWriter fileWriter = new FileWriter(userNumbers.getAbsolutePath(), true);
 
-        fileWriter.write(comboEncryptedConversion +"\n");
+        fileWriter.write(comboEncryptedConversion +"\n");//Writes the encrypted data to the file and starts a new line so it can be read line by line
 
         fileWriter.close();
 
@@ -64,9 +67,9 @@ public class AddUserNumbers extends HttpServlet {
 
 
         HttpSession session = request.getSession();
-        if(session.getAttribute("keypair") !=null){ //if the key already exists we retrieve it
+        if(session.getAttribute("key") !=null){ //if the key already exists we retrieve it
         desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-        myDesKey = (SecretKey) session.getAttribute("keypair");}
+        myDesKey = (SecretKey) session.getAttribute("key");}
 
         else {//if the key doesn't exist we make one
             // Create the cipher and the key
@@ -74,7 +77,7 @@ public class AddUserNumbers extends HttpServlet {
             myDesKey = keygenerator.generateKey();
             desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
             session.setAttribute("cipher",desCipher);
-            session.setAttribute("keypair",myDesKey);
+            session.setAttribute("key",myDesKey);
         }
 
         desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);

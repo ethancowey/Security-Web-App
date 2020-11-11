@@ -15,7 +15,7 @@ public class NumberChecker extends HttpServlet {
         HttpSession session = request.getSession();
         ArrayList<String> arr = (ArrayList<String>) session.getAttribute("draws");//This is set after being read and decrypted from a txt in GetUserNumbers.java
         String winningDraw = (String) session.getAttribute("winningDraws");//This is set from the DB in the winningDraw() function in CreateAccount.java
-        int j = 0;
+        int j = 0; //The winning draw is 10 11 12 13 14 15
         if(arr != null){
         if(!arr.isEmpty())
             {
@@ -40,9 +40,8 @@ public class NumberChecker extends HttpServlet {
                 }
             }
         }
-        if(j == 0){
-
-            //alert("No win this time better luck next time");
+        if(j == 0){//j is changed to 1 if theres a match
+            //No match so they have not won this time
 
             if(session.getAttribute("path")!=null){
                 String filePath = (String) session.getAttribute("path");

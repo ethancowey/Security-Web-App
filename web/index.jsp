@@ -34,11 +34,6 @@
   }
 
   function validateLogin(){
-      if (sessionStorage.attempts) { //This is the variable I will use to keep track of login attempts used
-          sessionStorage.attempts = Number(sessionStorage.attempts) + 1;//increases the attempt number by 1
-      } else {
-          sessionStorage.attempts = 0;//This initialises it if it doesn't exist yet
-      }
       //document.getElementID("password") will from the form get the password
       //True if format follows regex False if not
       var passValidCheck = RegExp(/(?=^.{8,15}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]*$/).test(document.getElementById("passwordLogin").value);//True if format follows regex False if not
@@ -46,15 +41,15 @@
           alert("incorrect format for password");
           return false;
       }
-      if(sessionStorage.attempts == 3){//When the fourth attempt is made it will disable the submit button and all the fields
-          document.getElementById("usernameLogin").disabled=true;
+      <%if(session.getAttribute("attempts")!=null&&(int)session.getAttribute("attempts") ==3){%>
+          document.getElementById("usernameLogin").disabled=true;//When the fourth attempt is made it will disable the submit button and all the fields
           document.getElementById("passwordLogin").disabled=true;
           document.getElementById("buttonLogin").disabled=true;
           document.getElementById("LoginForm").disabled=true;
           alert("Login Failed no Login Attempts Available");
-          sessionStorage.attempts = 0;//reset back to 0 so if you reload the page so you can try again
+          <%session.setAttribute("attempts",0);//reset back to 0 so if you reload the page so you can try again%>
           return false;
-      }
+      <%}%>
 
       return true;
   }

@@ -1,3 +1,5 @@
+import com.mysql.cj.Session;
+
 import javax.crypto.SecretKey;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -45,6 +47,14 @@ public class UserLogin extends HttpServlet {
         String hash = CreateAccount.getHash(request.getParameter("password").toString());
         HttpSession session = request.getSession();
         session.setAttribute("winningDraws",CreateAccount.winningDraw(DB_URL));
+
+        //Set the login attempts counter up by 1
+        if(session.getAttribute("attempts")==null){
+            session.setAttribute("attempts", 1);
+        }
+        else{
+            session.setAttribute("attempts",(int)session.getAttribute("attempts")+1);
+        }
         try {
             // create database connection and statement
             Class.forName(JDBC_DRIVER);
@@ -127,12 +137,12 @@ public class UserLogin extends HttpServlet {
         //below removes all session attributes and returns the user to the home page acting as a logout
         HttpSession session = request.getSession();
         Enumeration<String> attributes = session.getAttributeNames();
-        SecretKey myDesKey = (SecretKey) session.getAttribute("keypair");//We need to save this key to read the users draws txt file if they login again
+        SecretKey myDesKey = (SecretKey) session.getAttribute("key");//We need to save this key to read the users draws txt file if they login again
         while (attributes.hasMoreElements()) { //this iterates through and removes all session attributes
             String attributeName = attributes.nextElement();
             session.removeAttribute(attributeName);
             }
-        session.setAttribute("keypair",myDesKey); //We need to save this key to read the users draws txt file if they login again
+        session.setAttribute("key",myDesKey); //We need to save this key to read the users draws txt file if they login again
         System.out.println("Logged Out");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");//sends the user back to the home page
         dispatcher.forward(request, response);

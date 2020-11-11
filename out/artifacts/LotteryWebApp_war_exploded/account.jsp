@@ -23,7 +23,7 @@
 <p><%= session.getAttribute("message2") %></p>
 
 
-<p><%= "Below Are your draws remember to click get draws" %></p>
+<p><%= "Below Are your draws remember to click get draws for them to appear" %></p>
 <p><%= session.getAttribute("draws") %></p>
 
 <script>
@@ -95,7 +95,7 @@
 <form action="NumberChecker" method="post">
     <input type="submit" value="Check your numbers">
 </form>
-<p><%="Below will tell you if you've won please click Check your Numbers" %></p>
+<p><%="Below will tell you if you've won please click Check your Numbers to see if you've won"%></p>
 <p><%=session.getAttribute("winCheck")%></p>
 </br>
 

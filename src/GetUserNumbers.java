@@ -25,9 +25,9 @@ public class GetUserNumbers extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         String hash = session.getAttribute("password").toString();
-        String hashReduced = hash.substring(0,20);
+        String hashReduced = hash.substring(0,20);//The files name is the first 20 chars of the hashed password
 
-        File userNumbers = new File(hashReduced+".txt");
+        File userNumbers = new File("Draws", hashReduced+".txt");
 
         if(!userNumbers.exists()){
             //This will happen when a user logs in but hasn't made any number draws yet so is sent to the account page as they have no file with numbers in yet
@@ -45,21 +45,17 @@ public class GetUserNumbers extends HttpServlet {
         ArrayList<String> draws = new ArrayList<String>();
         String data = null;
         String line = br.readLine();
-        while (line != null) {//reads line by line
-        data = line;
-
-
-
+        //The while loop will read one line at a time and decrypt that line and add it to our arrayList draws
+        while (line != null) {//reads line by line as we have written each encrypted string on a new line
+        data = line;//Set the line to be decoded to the string data
+        //Puts the line read back into byte form as we made it a string to write it here
         byte[] databytes = Base64.getDecoder().decode(data);
         line = br.readLine();
-
-
-
 
         try {
 
         Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-        SecretKey myDesKey = (SecretKey) session.getAttribute("keypair");//Get the previously used key
+        SecretKey myDesKey = (SecretKey) session.getAttribute("key");//Get the previously used key
 
         // Initialize the same cipher as used in AddUserNumbers for decryption
         desCipher.init(Cipher.DECRYPT_MODE, myDesKey);
@@ -72,7 +68,7 @@ public class GetUserNumbers extends HttpServlet {
 
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
-    } catch (NoSuchPaddingException e) {
+        } catch (NoSuchPaddingException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
