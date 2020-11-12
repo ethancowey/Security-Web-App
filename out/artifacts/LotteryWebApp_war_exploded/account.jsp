@@ -15,11 +15,8 @@
 <body>
 <h1>User Account</h1>
 
-<p><%= session.getAttribute("message") %><%!
-    private Object ArrayList;
-
-
-%></p>
+<p><%= session.getAttribute("message") %></p>
+<p><%= request.getAttribute("filteredMessage") %></p>
 <p><%= session.getAttribute("message2") %></p>
 
 

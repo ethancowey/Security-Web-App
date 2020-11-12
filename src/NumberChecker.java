@@ -33,7 +33,7 @@ public class NumberChecker extends HttpServlet {
 
                             RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
                             session.setAttribute("winCheck", "Congratulations you have WON!");
-                            session.setAttribute("draws", null);//Sets the session for draws back to null also as it can outlive the txt file
+                            session.setAttribute("draws", null);//Sets the session for draws back to null as the session can outlive the txt file
                             dispatcher.forward(request, response);
                         }
                         }

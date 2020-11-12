@@ -44,9 +44,9 @@ public class UserLogin extends HttpServlet {
 
         //Set the username and password thats been hashed to variables to be used in SQL statements
         String username = request.getParameter("username");
-        String hash = CreateAccount.getHash(request.getParameter("password").toString());
+        String hash = CreateAccount.getHash(request.getParameter("password"));//Calls hash function I made in CreateAccount.java
         HttpSession session = request.getSession();
-        session.setAttribute("winningDraws",CreateAccount.winningDraw(DB_URL));
+        session.setAttribute("winningDraws",CreateAccount.winningDraw(DB_URL));//Get  the wining draws from the db using this function
 
         //Set the login attempts counter up by 1
         if(session.getAttribute("attempts")==null){
