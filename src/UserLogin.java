@@ -107,7 +107,7 @@ public class UserLogin extends HttpServlet {
 
             } else { //If theres no match in the database they are sent here as the login failed
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
-                request.setAttribute("message", "Login Unsuccessful");
+                request.setAttribute("message", "Login Unsuccessful you have "+(3 - (int)session.getAttribute("attempts"))+" attempts remaining");
                 dispatcher.forward(request, response);
             }
 

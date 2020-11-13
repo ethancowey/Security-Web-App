@@ -88,7 +88,7 @@ public class CreateAccount extends HttpServlet {
           if (request.getParameter("admin") != null) {
                 // display admin.jsp page with given message if successful admin account
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin_home.jsp");
-                session.setAttribute("message", firstname + ", welcome admin");
+                session.setAttribute("message", firstname + ", you have successfully made an admin account");
                 dispatcher.forward(request, response);
           } else {
                 // display account.jsp page with given message if successful non admin account
@@ -127,9 +127,9 @@ public class CreateAccount extends HttpServlet {
 
     protected static String getHash(String input) {
         try {
-            //MessageDigest classes Static getInstance method is called with MD5 hashing
+            //Call the hashing algorithm SHA-1
             MessageDigest msgDigest = MessageDigest.getInstance("SHA-1");
-            //digest() it returns an array of byte thats been hashed that we need to convert to a string
+            //Hash the input in byte form
             byte[] inpDigest = msgDigest.digest(input.getBytes());
             BigInteger inpDigestBigInt = new BigInteger(1, inpDigest);
             // Converts the bytes into a string hex value

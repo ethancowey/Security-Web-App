@@ -16,6 +16,7 @@
     response.sendRedirect("UserLogin");//This redirects to the doGet method which logs you out preventing an invalid user getting here
 }
 %>
+<p><%=session.getAttribute("message")%></p>
 <body>
 <form action="DisplayAllData" method="post">
     <input type="submit" value="Get All User Account Data">

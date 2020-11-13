@@ -15,10 +15,7 @@ import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Scanner;
+import java.util.*;
 
 @WebServlet("/GetUserNumbers")
 public class GetUserNumbers extends HttpServlet {
@@ -34,7 +31,7 @@ public class GetUserNumbers extends HttpServlet {
             //So as no file exists yet they are sent to the account page as theres no numbers to get
             RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
             request.setAttribute("password",session.getAttribute("password"));
-            request.setAttribute("password",session.getAttribute("username"));
+            request.setAttribute("username",session.getAttribute("username"));
             dispatcher.forward(request, response);
             return;
         }
@@ -42,7 +39,7 @@ public class GetUserNumbers extends HttpServlet {
         session.setAttribute("path",userNumbers.getAbsolutePath());
         FileReader myReader = new FileReader(userNumbers);
         BufferedReader br = new BufferedReader(myReader);
-        ArrayList<String> draws = new ArrayList<String>();
+        ArrayList<String> draws = new ArrayList<String>();//This will be converted to an array later we are using it for arrayList functions
         String data = null;
         String line = br.readLine();
         //The while loop will read one line at a time and decrypt that line and add it to our arrayList draws
@@ -65,6 +62,7 @@ public class GetUserNumbers extends HttpServlet {
 
         //add it to the arrayList draws
         draws.add(new String(textDecrypted));
+        //Set the normal array to the array list
 
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
@@ -75,10 +73,12 @@ public class GetUserNumbers extends HttpServlet {
         }
     }
     //Pass the information back to the accounts page
+    String[] drawsArray = draws.toArray(draws.toArray(new String[0]));//Convert the ArrayList to a regular Array
     RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
-    session.setAttribute("draws", draws);
+    session.setAttribute("draws", drawsArray);//Set the session version of draws to be used in other functions
+    request.setAttribute("draws", drawsArray);//Set the request version to be outputted on account.jsp
     request.setAttribute("password",session.getAttribute("password"));
-    request.setAttribute("password",session.getAttribute("username"));
+    request.setAttribute("username",session.getAttribute("username"));
     dispatcher.forward(request, response);
     }
 

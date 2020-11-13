@@ -8,7 +8,7 @@
 <head>
     <title>Account</title>
 </head>
-<%if(session.getAttribute("admin")!=null){
+<%if(session.getAttribute("admin")!=null || session.getAttribute("username")==null){
     response.sendRedirect("UserLogin"); //This redirects to the doGet method which logs you out preventing an invalid user getting here
 }
 %>
@@ -21,7 +21,16 @@
 
 
 <p><%= "Below Are your draws remember to click get draws for them to appear" %></p>
-<p><%= session.getAttribute("draws") %></p>
+<%StringBuilder drawsString = new StringBuilder();
+drawsString.append("You'r Draws are here:");
+
+String[] drawsArray = (String[]) request.getAttribute("draws");
+if(drawsArray != null){
+for (int i=0; i<drawsArray.length; i++){
+    drawsString.append(drawsArray[i]+", ");
+}}%>
+<p><%= drawsString %></p>
+
 
 <script>
     function validateNumbers(){
@@ -93,7 +102,10 @@
     <input type="submit" value="Check your numbers">
 </form>
 <p><%="Below will tell you if you've won please click Check your Numbers to see if you've won"%></p>
-<p><%=session.getAttribute("winCheck")%></p>
+<%if(request.getAttribute("winCheck") != null){%>
+<h2><%=request.getAttribute("winCheck")%></h2>
+<%}%>
+
 </br>
 
 <a href="UserLogin">Home Page and Log out</a>

@@ -15,24 +15,22 @@ public class InputFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         boolean invalid = false;
         Map params = request.getParameterMap();//Gets all the user inputs via the requests
-        Enumeration<String> attributes = request.getAttributeNames();
         if(params != null){
             Iterator iter = params.keySet().iterator();
             while(iter.hasNext()){
-                String key = (String) iter.next();
-                String[] values = (String[]) params.get(key);//Makes an array of the values of the requests
-
+                String[] values = (String[]) params.get(iter.next());//Makes an array of the values of the requests
                 for(int i=0; i < values.length; i++) {
                     if (checkChars(values[i])) { //Checks if the value has an illegal character
-                        invalid = true;
+                        invalid = true;//Set to true if theres invalid characters
                         break;
                     }
                 }
+            }
                 if(invalid){
                     try{
                         RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
                         request.setAttribute("message", "Illegal characters used");
-                        dispatcher.include(request, response);
+                        dispatcher.include(request, response);//Sends the user to the error page for using an illegal character
                         return;
                     }
                     catch (Exception ex) {
@@ -45,7 +43,7 @@ public class InputFilter implements Filter {
                     chain.doFilter(request, response);
                     return;
                 }
-        }}
+        }
         request.setAttribute("filteredMessage","Success No Illegal characters used");
         chain.doFilter(request, response);}
 
@@ -61,7 +59,7 @@ public class InputFilter implements Filter {
 
         for(int i = 0; i < illegalChars.length; i++){//Iterates through the bad characters seeing if any are a part of the value
             if(value.contains(illegalChars[i])){
-                illegalInput = true;
+                illegalInput = true;//Make true so that when it returns it shows theres an illegal character
                 break;
             }
         }

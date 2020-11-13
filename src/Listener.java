@@ -25,7 +25,6 @@ public class Listener implements ServletContextListener,
          initialized(when the Web application is deployed). 
          You can initialize servlet context related data here.
       */
-        System.out.println("Listening");
         File directory = new File("Draws"); //Make the file directory here at the begining
         if (! directory.exists()){
             directory.mkdir();

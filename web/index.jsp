@@ -3,7 +3,7 @@
   <head>
     <title>Home</title>
   </head>
-  <body>
+  <body onload="loginDisabled()">
 
   <h1>Home Page</h1>
   <script>
@@ -41,17 +41,17 @@
           alert("incorrect format for password");
           return false;
       }
-      <%if(session.getAttribute("attempts")!=null&&(int)session.getAttribute("attempts") ==3){%>
-          document.getElementById("usernameLogin").disabled=true;//When the fourth attempt is made it will disable the submit button and all the fields
-          document.getElementById("passwordLogin").disabled=true;
-          document.getElementById("buttonLogin").disabled=true;
-          document.getElementById("LoginForm").disabled=true;
-          alert("Login Failed no Login Attempts Available");
-          <%session.setAttribute("attempts",0);//reset back to 0 so if you reload the page so you can try again%>
-          return false;
-      <%}%>
-
       return true;
+  }
+  function loginDisabled(){
+  <%if(session.getAttribute("attempts")!=null&&(int)session.getAttribute("attempts") ==3){%>
+  document.getElementById("usernameLogin").disabled=true;//When the fourth attempt is made it will disable the submit button and all the fields
+  document.getElementById("passwordLogin").disabled=true;
+  document.getElementById("buttonLogin").disabled=true;
+  document.getElementById("LoginForm").disabled=true;
+  alert("Login Failed no Login Attempts Available");
+  <%session.setAttribute("attempts",0);//reset back to 0 so if you reload the page so you can try again%>
+  <%}%>
   }
   </script>
   <form action="CreateAccount" onsubmit="return validateForm()" method="post">
