@@ -8,10 +8,11 @@
 <head>
     <title>Account</title>
 </head>
-<%if(session.getAttribute("admin")!=null || session.getAttribute("username")==null){
-    response.sendRedirect("UserLogin"); //This redirects to the doGet method which logs you out preventing an invalid user getting here
-}
-%>
+<%if(session.getAttribute("admin")!=null || session.getAttribute("username")==null){%>
+    <%RequestDispatcher dispatcher = request.getRequestDispatcher("/UserLogin");%>
+    <%dispatcher.forward(request, response);%>
+<%//This redirects to the doGet method which logs you out preventing an invalid user getting here%>
+<%}%>
 <body>
 <h1>User Account</h1>
 
@@ -95,20 +96,17 @@ for (int i=0; i<drawsArray.length; i++){
 <button onclick="numberGenerator()" type="button">generate numbers</button>
 <br>
 <form action ="GetUserNumbers" method="post">
-    <input type="submit" value="get your draws">
+    <input type="submit" value="Get Draws">
 </form>
 <br>
 <form action="NumberChecker" method="post">
     <input type="submit" value="Check your numbers">
 </form>
 <p><%="Below will tell you if you've won please click Check your Numbers to see if you've won"%></p>
-<%if(request.getAttribute("winCheck") != null){%>
-<h2><%=request.getAttribute("winCheck")%></h2>
+<%if(request.getAttribute("winCheck") != null){//IMPORTANT The winning draw is 10 11 12 13 14 15%>
+<h3><%=request.getAttribute("winCheck")%></h3>
 <%}%>
-
 </br>
-
 <a href="UserLogin">Home Page and Log out</a>
-
 </body>
 </html>

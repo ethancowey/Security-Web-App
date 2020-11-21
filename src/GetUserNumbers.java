@@ -20,6 +20,9 @@ import java.util.*;
 @WebServlet("/GetUserNumbers")
 public class GetUserNumbers extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        /**
+         * This method gets the numbers from the users txt file and decrypts them and adds them to an array
+         */
         HttpSession session = request.getSession();
         String hash = session.getAttribute("password").toString();
         String hashReduced = hash.substring(0,20);//The files name is the first 20 chars of the hashed password
@@ -45,24 +48,24 @@ public class GetUserNumbers extends HttpServlet {
         //The while loop will read one line at a time and decrypt that line and add it to our arrayList draws
         while (line != null) {//reads line by line as we have written each encrypted string on a new line
         data = line;//Set the line to be decoded to the string data
-        //Puts the line read back into byte form as we made it a string to write it here
+        //Puts the line read back into byte form as we made it into a string to write it here and need it back in byte form
         byte[] databytes = Base64.getDecoder().decode(data);
         line = br.readLine();
 
-        try {
+        try {//We know will decrypt the line of data we've read and set to databytes
 
-        Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-        SecretKey myDesKey = (SecretKey) session.getAttribute("key");//Get the previously used key
+        Cipher desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        SecretKey myAesKey = (SecretKey) session.getAttribute("key");//Get the previously used key
 
         // Initialize the same cipher as used in AddUserNumbers for decryption
-        desCipher.init(Cipher.DECRYPT_MODE, myDesKey);
+        desCipher.init(Cipher.DECRYPT_MODE, myAesKey);
 
         // Decrypt the text
         byte[] textDecrypted = desCipher.doFinal(databytes);
 
         //add it to the arrayList draws
         draws.add(new String(textDecrypted));
-        //Set the normal array to the array list
+        //Later after the loop it will set the array list to an array
 
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();

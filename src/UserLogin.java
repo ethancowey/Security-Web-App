@@ -23,7 +23,12 @@ public class UserLogin extends HttpServlet {
     private Statement stmt;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        /**
+         * This method checks the database for a match with the values from the login form
+         * If successful an admin account is sent to the admin_home.jsp page and a user to the account.jsp page
+         * Both are sent with a login success message
+         * If non-successful they are sent to the error page and their login attempts remaining is decreased
+         */
         String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
         String USER = "user";
         String PASS = "password";
@@ -45,6 +50,7 @@ public class UserLogin extends HttpServlet {
         //Set the username and password thats been hashed to variables to be used in SQL statements
         String username = request.getParameter("username");
         String hash = CreateAccount.getHash(request.getParameter("password"));//Calls hash function I made in CreateAccount.java
+
         HttpSession session = request.getSession();
         session.setAttribute("winningDraws",CreateAccount.winningDraw(DB_URL));//Get  the wining draws from the db using this function
 
@@ -71,7 +77,7 @@ public class UserLogin extends HttpServlet {
 
             while (rs.next() && found == false) {
                 if (rs.getString("Username").equals(username) && rs.getString("Pwd").equals(hash)) {
-                    //Sets all the user data in the file to session attributes to be used later
+                    //Sets all the user data in the matching database entry to session attributes to be used later
                     session.setAttribute("firstname", rs.getString("Firstname"));
                     session.setAttribute("lastname", rs.getString("Lastname"));
                     session.setAttribute("email", rs.getString("Email"));
@@ -95,14 +101,15 @@ public class UserLogin extends HttpServlet {
                 //If its an admin logging in they will be directed to admin_home.jsp
                 if(session.getAttribute("admin") != null){
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin_home.jsp");
-                    session.setAttribute("message", "Login Successful Admin");
+                    session.setAttribute("message", "Login Successful Admin "+firstname);
                     dispatcher.forward(request, response);
                 }
                 //If its a regular user they are sent to account.jsp page
                 else{
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
                 session.setAttribute("message", "Login Successful");
-                session.setAttribute("message2", "Your details: "+firstname +" "+lastname+" "+email+" "+phone+" "+username);
+                session.setAttribute("message2", "Your details Firstname: "+firstname +" Lastname: "+lastname+
+                        " Email: "+email+" Number: "+phone+" Username: "+username);
                 dispatcher.forward(request, response);}
 
             } else { //If theres no match in the database they are sent here as the login failed
@@ -134,6 +141,9 @@ public class UserLogin extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        /**
+         * This removes all session data apart from the key for encryption and acts as a logout sending the user to the home page
+         */
         //below removes all session attributes and returns the user to the home page acting as a logout
         HttpSession session = request.getSession();
         Enumeration<String> attributes = session.getAttributeNames();
@@ -144,7 +154,7 @@ public class UserLogin extends HttpServlet {
             }
         session.setAttribute("key",myDesKey); //We need to save this key to read the users draws txt file if they login again
         System.out.println("Logged Out");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");//sends the user back to the home page
-        dispatcher.forward(request, response);
+        response.sendRedirect("/LotteryWebApp_war");
+
     }
 }

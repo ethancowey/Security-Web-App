@@ -25,7 +25,7 @@ public class Listener implements ServletContextListener,
          initialized(when the Web application is deployed). 
          You can initialize servlet context related data here.
       */
-        File directory = new File("Draws"); //Make the file directory here at the begining
+        File directory = new File("Draws"); //Make the file directory here at the beginning to put txt files in later
         if (! directory.exists()){
             directory.mkdir();
 
@@ -39,11 +39,13 @@ public class Listener implements ServletContextListener,
       */
         File directory = new File("Draws");
         if(directory.exists()) {
-            for (File file : directory.listFiles())
-                if (!file.isDirectory())
-                    file.delete();
+            for (File file : directory.listFiles()) {//Iterates through the files in the directory
+                if (file.isFile()) { //If the file is a normal file so not a directory
+                    file.delete();//deletes the file
+                }
+            }
 
-            directory.delete();
+            directory.delete();//finally deletes the directory
         }
     }
 

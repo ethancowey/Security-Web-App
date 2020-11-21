@@ -15,7 +15,9 @@ public class DisplayAllData extends HttpServlet {
     private Statement stmt;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        /**
+         * Gets all data apart from the passwords from the database and puts them in a html table
+         */
         String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
         String USER = "user";
         String PASS = "password";

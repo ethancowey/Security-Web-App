@@ -14,13 +14,18 @@ import java.util.List;
 @WebServlet("/NumberChecker")
 public class NumberChecker extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        /**
+         * Checks if the users numbers match the winning numbers which are 10 11 12 13 14 15
+         * The user will need a to get there most recent numbers to set them in the session attribute draws
+         * It will output a message on account.jsp to let the user know if they won or not
+         */
         HttpSession session = request.getSession();
+        //IMPORTANT The winning draw is 10 11 12 13 14 15
         int j = 0;
         if (session.getAttribute("draws") != null) {
             String[] drawsArray = (String[]) session.getAttribute("draws");//This is set after being read and decrypted from a txt in GetUserNumbers.java
             List<String> arr = Arrays.asList(drawsArray);//Convert to list to use List functions on the array
             String winningDraw = (String) session.getAttribute("winningDraws");//This is set from the DB in the winningDraw() function in CreateAccount.java
-            //The winning draw is 10 11 12 13 14 15
             if (arr != null) {
                 if (!arr.isEmpty()) {
                     for (int i = 0; i < arr.size(); i++) //Iterates through the arraylist of user draws

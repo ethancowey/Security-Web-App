@@ -3,14 +3,14 @@
   <head>
     <title>Home</title>
   </head>
-  <body onload="loginDisabled()">
+  <body onload="loginDisabledCheck()">
 
   <h1>Home Page</h1>
   <script>
   function validateForm() {
       //document.getElementID("phone") will from the form get the phone number
       //True if format follows regex False if not
-      var phoneValidCheck = RegExp(/^[0-9]{2}[-\s\.]{0,1}[0-9]{4}[-\s\.]{0,1}[0-9]{7}$/).test(document.getElementById("phone").value);
+      var phoneValidCheck = RegExp(/^[0-9]{2}[-]{1}[0-9]{4}[-]{1}[0-9]{7}$/).test(document.getElementById("phone").value);
       if (!phoneValidCheck) {
           alert("Incorrect format for phone number \n Should be in the format XX-XXXX-XXXXXXX");
             return false;//Returning false means the form is not submitted
@@ -43,7 +43,7 @@
       }
       return true;
   }
-  function loginDisabled(){
+  function loginDisabledCheck(){
   <%if(session.getAttribute("attempts")!=null&&(int)session.getAttribute("attempts") ==3){%>
   document.getElementById("usernameLogin").disabled=true;//When the fourth attempt is made it will disable the submit button and all the fields
   document.getElementById("passwordLogin").disabled=true;

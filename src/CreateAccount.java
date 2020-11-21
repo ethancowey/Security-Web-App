@@ -16,6 +16,11 @@ import java.sql.*;
 
 @WebServlet("/CreateAccount")
 public class CreateAccount extends HttpServlet {
+    /**
+     * Takes the input from the registration form and adds it into the database if it doesn't already exist
+     * If successful an admin is sent to the admin_home.jsp page with and a user to the account.jsp page
+     * If an account exists with the same credentials they are sent to the error.jsp page
+     */
 
 
     private static Connection conn;
@@ -94,7 +99,8 @@ public class CreateAccount extends HttpServlet {
                 // display account.jsp page with given message if successful non admin account
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
                 session.setAttribute("message", firstname + ", you have successfully created an account");
-                session.setAttribute("message2", "Your details: "+firstname +" "+lastname+" "+email+" "+phone+" "+username);
+                session.setAttribute("message2", "Your details Firstname: "+firstname +" Lastname: "+lastname+" " +
+                        " Email: "+email+" Number: "+phone+" Username: "+username);
                 dispatcher.forward(request, response);
             }
 
@@ -126,17 +132,22 @@ public class CreateAccount extends HttpServlet {
     }
 
     protected static String getHash(String input) {
+        /**
+        * @param input Is the passworrd we want to hash
+         * @return hash Is the hashed password using SHA-256
+         */
         try {
-            //Call the hashing algorithm SHA-1
-            MessageDigest msgDigest = MessageDigest.getInstance("SHA-1");
+            //Call the hashing algorithm SHA-256
+            MessageDigest msgDigest = MessageDigest.getInstance("SHA-256");
             //Hash the input in byte form
             byte[] inpDigest = msgDigest.digest(input.getBytes());
             BigInteger inpDigestBigInt = new BigInteger(1, inpDigest);
             // Converts the bytes into a string hex value
             String hash = inpDigestBigInt.toString(16);
+            //The hash will be 64 digits long
             return hash;
         }
-        // Catch block to handle if SHA-1 doesn't exist
+        // Catch block to handle if SHA-256 doesn't exist
         catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
@@ -144,8 +155,12 @@ public class CreateAccount extends HttpServlet {
 
 
     protected static String winningDraw(String url){
+        /**
+         * @param url the database url to connect to
+         * @return winningDraw returns the winning draw 10 11 12 13 14 15 which is written and read from the database
+         */
         String DB_URL = url;
-        String winningDraw = null; //this will be the winning numbers from the database
+        String winningDraw = null; //this will be the variable where the winning numbers from the database is saved to
         String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
         String USER = "user";
         String PASS = "password";
@@ -155,7 +170,7 @@ public class CreateAccount extends HttpServlet {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             //Add new data into the winning draws table I added to data.sql
             String sqlInsert = "INSERT INTO winningDraws " +
-                    "VALUE('10 11 12 13 14 15')";
+                    "VALUE('10 11 12 13 14 15')";//Winning draw is 10 11 12 13 14 15
             stmt = conn.prepareStatement(sqlInsert);
             stmt.execute();
             //Select the winning draws from the database

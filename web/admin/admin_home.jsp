@@ -11,11 +11,14 @@
     <title>Admin Home page</title>
     <h1>Admin Home Page</h1>
 </head>
-<%System.out.println(session.getAttribute("admin"));
-    if(session.getAttribute("admin")==null){
-    response.sendRedirect("UserLogin");//This redirects to the doGet method which logs you out preventing an invalid user getting here
-}
-%>
+<%
+    if(session.getAttribute("admin")==null){%>
+
+        <%RequestDispatcher dispatcher = request.getRequestDispatcher("/UserLogin");%>
+        <%dispatcher.forward(request, response);%>
+        <%//This redirects to the doGet method which logs you out preventing an invalid user getting here%>
+<%}%>
+
 <p><%=session.getAttribute("message")%></p>
 <body>
 <form action="DisplayAllData" method="post">
